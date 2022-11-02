@@ -5,18 +5,18 @@ from .get_doc_page_urls import get_doc_page_urls
 
 
 def download_docs_with_requests(url):
+    print(url)
     html = get_html_from_url(url)
     soup = BeautifulSoup(html, 'html.parser')
     links = soup.find_all("a", {"title": "View Document"})
+    case_number = soup.find("input", {"name": "caseNumber"})
     if not links:
         print(f"No links for {url}")
         return
-    for link in links:
-        os.path.abspath(os.path.join(os.getcwd(), "..", "scrape_cache"))
-        output_path = os.path.join(os.getcwd(), "salford_docs")
+    for index, link in enumerate(links):
         href = link.get('href')
-        print(href)
-        # download_file(output_path, href)
+        href = f"https://pa.manchester.gov.uk{href}"
+        download_document(case_number.get("value"), index, href, url)
 
 
 def download_all_docs_with_requests():
