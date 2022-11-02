@@ -75,15 +75,13 @@ def download_document(case_number, index, url, referer):
         "Upgrade-Insecure-Requests": "1",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0"
     }
-
-    print(url)
     response = requests.get(url, headers=headers)
     # Save the PDF
     if response.status_code == 200:
         with open(download_path, "wb") as f:
             f.write(response.content)
     else:
-        print(response.status_code)
+        raise Exception(f"{response.status_code}: f{url}")
     time.sleep(5)
 
 def download_document_with_selenium(case_number, index, url):
