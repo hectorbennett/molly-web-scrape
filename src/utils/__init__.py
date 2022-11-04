@@ -1,10 +1,12 @@
 import os
-import os
 import time
 import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+
+from .docx_contains_text import docx_contains_text
+from .pdf_contains_text import pdf_contains_text
 
 
 
@@ -82,7 +84,8 @@ def download_document(case_number, index, url, referer):
             f.write(response.content)
     else:
         raise Exception(f"{response.status_code}: f{url}")
-    time.sleep(5)
+    print(f'downloaded {case_number} {index} {url}')
+    time.sleep(1)
 
 def download_document_with_selenium(case_number, index, url):
     print(f'download {case_number} {index} {url}')
@@ -103,6 +106,16 @@ def download_document_with_selenium(case_number, index, url):
     # download_path = os.path.join(output_folder, filename)
 
 
-
-if __name__ == '__main__':
-    get_html_from_url('https://www.google.com')
+def file_contains_text(filepath, text_string):
+    if filepath.endswith('.pdf'):
+        return pdf_contains_text(filepath, text_string)
+    elif filepath.endswith('.docx'):
+        return docx_contains_text(filepath, text_string)
+    elif filepath.endswith('.jpg'):
+        return None
+    elif filepath.endswith('.a'):
+        return None
+    elif filepath.endswith('.xls'):
+        return None
+    else:
+        raise Exception(filepath)

@@ -10,6 +10,7 @@ input_csv = os.path.abspath(os.path.join(os.getcwd(), "..", "input_data.csv"))
 
 
 def get_doc_page_urls():
+    urls = []
     with open(input_csv, newline='') as csvfile:
         filereader = csv.reader(csvfile)
         for row in filereader:
@@ -17,7 +18,7 @@ def get_doc_page_urls():
             affordable = row[6]
             url = row[2]
             if la == 'Manchester' and affordable == 'n/a':
-                return_url = url.replace('activeTab=summary', 'activeTab=documents')
-                yield return_url
+                urls.append(url.replace('activeTab=summary', 'activeTab=documents'))
+    return urls
 
 
